@@ -1,0 +1,17 @@
+{
+  "name": "telesign/blog-passwordless-service",
+  "type": "project",
+  "require": {
+    "slim/slim": "^3.7"
+  },
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Luka Zitnik",
+      "email": "lzitnik@telesign.com"
+    }
+  ],
+  "scripts": {
+    "start": "php -S 0.0.0.0:8081 -t public public/app.php"
+  }
+}
