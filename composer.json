@@ -3,7 +3,9 @@
   "type": "project",
   "require": {
     "slim/slim": "^3.7",
-    "firebase/php-jwt": "^4.0"
+    "firebase/php-jwt": "^4.0",
+    "telesign/telesign": "master@dev",
+    "vlucas/phpdotenv": "^2.4"
   },
   "license": "MIT",
   "authors": [
@@ -17,5 +19,9 @@
   },
   "config": {
     "process-timeout": 0
-  }
+  },
+  "repositories": [{
+    "type": "vcs",
+    "url": "ssh://git@github.com/TeleSign/php_telesign_private"
+  }]
 }
