@@ -6,6 +6,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use telesign\sdk\messaging\MessagingClient;
 use Firebase\JWT\JWT;
 use Dotenv\Dotenv;
+use Predis\Client as PredisClient;
 
 use function telesign\sdk\util\randomWithNDigits;
 
@@ -50,9 +51,20 @@ $app->group('/api/authenticate', function () use ($app) {
       ]);
     }
 
+    try {
+      $redis = new PredisClient(getenv('REDIS_URI'));
+      $redis->set($telesign_response->json->reference_id, $otp);
+      $redis->expire($telesign_response->json->reference_id, 60);
+    }
+    catch (\Exception $e) {
+      return $response->withJson([
+        'error' => 'Problem accessing storage'
+      ]);
+    }
+
     $jwt = JWT::encode([
       'sub' => $phone,
-      'otp' => $otp,
+      'reference_id' => $$telesign_response->json->reference_id,
       'exp' => strtotime('1 minute')
     ], getenv('SECRET_KEY'));
 
@@ -63,7 +75,7 @@ $app->group('/api/authenticate', function () use ($app) {
 
   $app->get('/verify_otp', function (Request $request, Response $response) {
     $params = $request->getQueryParams();
-    $otp = $params['otp'];
+    $user_supplied_otp = $params['otp'];
 
     try {
       $decoded = JWT::decode($params['authorization_code'], getenv('SECRET_KEY'), ['HS256']);
@@ -74,7 +86,16 @@ $app->group('/api/authenticate', function () use ($app) {
       ]);
     }
 
-    if ($otp != $decoded->otp) {
+    try {
+      $otp = (new PredisClient(getenv('REDIS_URI')))->get($decoded->reference_id);
+    }
+    catch (\Exception $e) {
+      return $response->withJson([
+        'error' => 'Problem accessing storage'
+      ]);
+    }
+
+    if ($otp === null or $user_supplied_otp != $otp) {
       return $response->withJson([
         'error' => "Could not verify your OTP"
       ]);
@@ -96,6 +117,7 @@ $app->group('/api/authenticate', function () use ($app) {
 
   try {
     $dotenv->required('SECRET_KEY')->notEmpty();
+    $dotenv->required('REDIS_URI')->notEmpty();
   }
   catch (\Exception $e) {
     return $response->withJson([
