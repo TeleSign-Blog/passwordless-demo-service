@@ -64,7 +64,7 @@ $app->group('/api/authenticate', function () use ($app) {
 
     $jwt = JWT::encode([
       'sub' => $phone,
-      'reference_id' => $$telesign_response->json->reference_id,
+      'reference_id' => $telesign_response->json->reference_id,
       'exp' => strtotime('1 minute')
     ], getenv('SECRET_KEY'));
 
