@@ -40,7 +40,7 @@ $app->group('/api/authenticate', function () use ($app) {
     $otp = randomWithNDigits(5);
 
     $telesign_response = (
-      new MessagingClient(getenv('TELESIGN_CUSTOMER_ID'), getenv('TELESIGN_SECRET_KEY'))
+      new MessagingClient(getenv('TELESIGN_CUSTOMER_ID'), getenv('TELESIGN_SECRET_KEY'), getenv('TELESIGN_REST_URI'))
     )->message($phone, "Your OTP is $otp.", 'OTP', [
       'account_lifecycle_event' => 'sign-in'
     ]);
@@ -135,6 +135,8 @@ $app->group('/api/protected', function () use ($app) {
       ->write(file_get_contents(__DIR__ . '/../albums.json'));
   });
 })->add(function (Request $request, Response $response, callable $next) {
+  (new Dotenv(__DIR__ . '/..'))->load();
+
   $authorization_header = $request->getHeader('Authorization');
 
   if (count($authorization_header) == 0) {
@@ -146,7 +148,7 @@ $app->group('/api/protected', function () use ($app) {
   $id_token = preg_replace('/^Bearer (\d+)$/', '$1', $authorization_header[0]);
 
   try {
-    JWT::decode($id_token, $secret_key, ['HS256']);
+    JWT::decode($id_token, getenv('SECRET_KEY'), ['HS256']);
   }
   catch (\Exception $e) {
     return $response->withJson([
