@@ -145,7 +145,7 @@ $app->group('/api/protected', function () use ($app) {
     ]);
   }
 
-  $id_token = preg_replace('/^Bearer (\d+)$/', '$1', $authorization_header[0]);
+  $id_token = preg_replace('/^Bearer (.+)$/', '$1', $authorization_header[0]);
 
   try {
     JWT::decode($id_token, getenv('SECRET_KEY'), ['HS256']);
