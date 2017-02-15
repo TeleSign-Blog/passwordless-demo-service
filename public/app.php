@@ -108,7 +108,8 @@ $app->group('/api/authenticate', function () use ($app) {
 
     return $response->withJson([
       'id_token' => $jwt,
-      'token_type' => 'Bearer'
+      'token_type' => 'Bearer',
+      'phone' => $decoded->sub
     ]);
   });
 })->add(function (Request $request, Response $response, callable $next) {
