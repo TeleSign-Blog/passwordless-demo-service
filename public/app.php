@@ -40,7 +40,7 @@ $app->group('/api/authenticate', function () use ($app) {
     $otp = randomWithNDigits(5);
 
     $telesign_response = (
-      new MessagingClient(getenv('TELESIGN_CUSTOMER_ID'), getenv('TELESIGN_SECRET_KEY'), getenv('TELESIGN_REST_URI'))
+      new MessagingClient(getenv('TELESIGN_CUSTOMER_ID'), getenv('TELESIGN_SECRET_KEY'), getenv('TELESIGN_REST_URL'))
     )->message($phone, "Your OTP is $otp.", 'OTP', [
       'account_lifecycle_event' => 'sign-in'
     ]);
@@ -52,7 +52,7 @@ $app->group('/api/authenticate', function () use ($app) {
     }
 
     try {
-      $redis = new PredisClient(getenv('REDIS_URI'));
+      $redis = new PredisClient(getenv('REDIS_URL'));
       $redis->set($telesign_response->json->reference_id, $otp);
       $redis->expire($telesign_response->json->reference_id, 60);
     }
@@ -87,7 +87,7 @@ $app->group('/api/authenticate', function () use ($app) {
     }
 
     try {
-      $otp = (new PredisClient(getenv('REDIS_URI')))->get($decoded->reference_id);
+      $otp = (new PredisClient(getenv('REDIS_URL')))->get($decoded->reference_id);
     }
     catch (\Exception $e) {
       return $response->withJson([
@@ -118,7 +118,7 @@ $app->group('/api/authenticate', function () use ($app) {
 
   try {
     $dotenv->required('SECRET_KEY')->notEmpty();
-    $dotenv->required('REDIS_URI')->notEmpty();
+    $dotenv->required('REDIS_URL')->notEmpty();
   }
   catch (\Exception $e) {
     return $response->withJson([
