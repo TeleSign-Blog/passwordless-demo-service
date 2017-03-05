@@ -24,5 +24,8 @@
   "repositories": [{
     "type": "vcs",
     "url": "ssh://git@github.com/TeleSign/php_telesign_private"
-  }]
+  }],
+  "require-dev": {
+    "heroku/heroku-buildpack-php": "^120.0"
+  }
 }

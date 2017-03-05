@@ -5,7 +5,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 use telesign\sdk\messaging\MessagingClient;
 use Firebase\JWT\JWT;
-use Dotenv\Dotenv;
 use Predis\Client as PredisClient;
 
 use function telesign\sdk\util\randomWithNDigits;
@@ -113,16 +112,10 @@ $app->group('/api/authenticate', function () use ($app) {
     ]);
   });
 })->add(function (Request $request, Response $response, callable $next) {
-  $dotenv = new Dotenv(__DIR__ . '/..');
-  $dotenv->load();
 
-  try {
-    $dotenv->required('SECRET_KEY')->notEmpty();
-    $dotenv->required('REDIS_URL')->notEmpty();
-  }
-  catch (\Exception $e) {
+  if (!getenv('SECRET_KEY') || !getenv('REDIS_URL')) {
     return $response->withJson([
-      'error' => $e->getMessage()
+      'error' => 'Environment not set up'
     ]);
   }
 
@@ -136,8 +129,6 @@ $app->group('/api/protected', function () use ($app) {
       ->write(file_get_contents(__DIR__ . '/../albums.json'));
   });
 })->add(function (Request $request, Response $response, callable $next) {
-  (new Dotenv(__DIR__ . '/..'))->load();
-
   $authorization_header = $request->getHeader('Authorization');
 
   if (count($authorization_header) == 0) {
