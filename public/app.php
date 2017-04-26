@@ -40,7 +40,7 @@ $app->group('/api/authenticate', function () use ($app) {
     $otp = randomWithNDigits(5);
 
     $telesign_response = (
-      new MessagingClient(getenv('TELESIGN_CUSTOMER_ID'), getenv('TELESIGN_SECRET_KEY'), getenv('TELESIGN_REST_URL'))
+      new MessagingClient(getenv('TELESIGN_CUSTOMER_ID'), getenv('TELESIGN_SECRET_KEY'))
     )->message($phone, "Your OTP is $otp.", 'OTP', [
       'account_lifecycle_event' => 'sign-in'
     ]);
