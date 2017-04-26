@@ -4,7 +4,7 @@
   "require": {
     "slim/slim": "^3.7",
     "firebase/php-jwt": "^4.0",
-    "telesign/telesign": "master@dev",
+    "telesign/telesign": "^2.0",
     "vlucas/phpdotenv": "^2.4",
     "predis/predis": "^1.1"
   },
@@ -20,9 +20,5 @@
   },
   "config": {
     "process-timeout": 0
-  },
-  "repositories": [{
-    "type": "vcs",
-    "url": "ssh://git@github.com/TeleSign/php_telesign_private"
-  }]
+  }
 }
