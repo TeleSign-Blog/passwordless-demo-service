@@ -39,12 +39,12 @@ $app->group('/api/authenticate', function () use ($app) {
     $otp = randomWithNDigits(5);
 
     $telesign_response = (
-      new MessagingClient(getenv('TELESIGN_CUSTOMER_ID'), getenv('TELESIGN_SECRET_KEY'), getenv('TELESIGN_REST_URL'))
+      new MessagingClient(getenv('TELESIGN_CUSTOMER_ID'), getenv('TELESIGN_SECRET_KEY'))
     )->message($phone, "Your OTP is $otp.", 'OTP', [
       'account_lifecycle_event' => 'sign-in'
     ]);
 
-    if ($telesign_response->status_code != 200 or !isset($telesign_response->json->reference_id)) {
+    if ($telesign_response->status_code != 200 or !isset($telesign_response->json['reference_id'])) {
       return $response->withJson([
         'error' => "$telesign_response->status_code: $telesign_response->body"
       ]);
@@ -52,8 +52,8 @@ $app->group('/api/authenticate', function () use ($app) {
 
     try {
       $redis = new PredisClient(getenv('REDIS_URL'));
-      $redis->set($telesign_response->json->reference_id, $otp);
-      $redis->expire($telesign_response->json->reference_id, 60);
+      $redis->set($telesign_response->json['reference_id'], $otp);
+      $redis->expire($telesign_response->json['reference_id'], 60);
     }
     catch (\Exception $e) {
       return $response->withJson([
@@ -63,7 +63,7 @@ $app->group('/api/authenticate', function () use ($app) {
 
     $jwt = JWT::encode([
       'sub' => $phone,
-      'reference_id' => $telesign_response->json->reference_id,
+      'reference_id' => $telesign_response->json['reference_id'],
       'exp' => strtotime('1 minute')
     ], getenv('SECRET_KEY'));
 

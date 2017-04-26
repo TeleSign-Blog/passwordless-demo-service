@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3fb842235f60bb1ad8a6a1d5a62d4e2e",
+    "content-hash": "9791f0ef58fd707a8b56297e535133d4",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -638,19 +638,27 @@
         },
         {
             "name": "telesign/telesign",
-            "version": "dev-master",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
-                "url": "ssh://git@github.com/TeleSign/php_telesign_private",
-                "reference": "b36da3a8ae72e3a57501e5584ce66871ce73eab8"
+                "url": "https://github.com/TeleSign/php_telesign.git",
+                "reference": "75f10a012b291d61f8653abc1020d0dc611fe706"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TeleSign/php_telesign/zipball/75f10a012b291d61f8653abc1020d0dc611fe706",
+                "reference": "75f10a012b291d61f8653abc1020d0dc611fe706",
+                "shasum": ""
             },
             "require": {
+                "ext-xml": "*",
                 "guzzlehttp/guzzle": "^6.2",
                 "php": ">=5.6.0",
                 "psr/http-message": "^1.0",
                 "ramsey/uuid": "^3.5"
             },
             "require-dev": {
+                "composer/semver": "^1.4",
                 "phpunit/phpunit": "^5.7"
             },
             "type": "library",
@@ -660,19 +668,10 @@
                 },
                 "files": [
                     "src/util.php",
-                    "src/version.php"
+                    "src/version/version.php"
                 ]
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "telesign\\sdk\\": "test/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "php vendor/phpunit/phpunit/phpunit --bootstrap ./vendor/autoload.php test/"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -686,7 +685,7 @@
             "description": "TeleSign SDK",
             "homepage": "https://github.com/telesign/php_telesign",
             "keywords": [
-                "authentication",
+                "Authentication",
                 "identity",
                 "messaging",
                 "mobile",
@@ -694,7 +693,7 @@
                 "telesign",
                 "voice"
             ],
-            "time": "2017-02-11 20:43:07"
+            "time": "2017-04-12T09:41:48+00:00"
         }
     ],
     "packages-dev": [
@@ -745,9 +744,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "telesign/telesign": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
