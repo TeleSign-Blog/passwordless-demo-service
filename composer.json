@@ -19,8 +19,5 @@
   },
   "config": {
     "process-timeout": 0
-  },
-  "require-dev": {
-    "heroku/heroku-buildpack-php": "^120.0"
   }
 }
