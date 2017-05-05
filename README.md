@@ -1,7 +1,7 @@
-This is made for a possible future blog post "Passwordless Authentication with Slim and Vue.js".
+# Passwordless Demo Service
 
-It goes in pair with [the blog-passwordless-website](https://bitbucket.c11.telesign.com/projects/SAN/repos/blog-passwordless-website).
+Accompanies post [Passwordless Authentication with Slim and Vue.js](https://www.telesign.com/blog/post/passwordless-authentication-with-slim-and-vue.js/), same as [Passwordless Demo Website](https://github.com/TeleSign-Blog/passwordless-demo-website).
 
 ## Running Locally
 
-After cloning the repo run `composer install` and then `composer start` to start the service.
+Run `composer install` and then `composer start` to start the service.
