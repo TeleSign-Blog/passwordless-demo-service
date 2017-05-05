@@ -19,7 +19,7 @@ $app = new \Slim\App([
 
 $app->add(function (Request $request, Response $response, callable $next) {
   return $next($request, $response)
-    ->withHeader('Access-Control-Allow-Origin', 'http://localhost:8080')
+    ->withHeader('Access-Control-Allow-Origin', 'https://telesign-blog.github.io')
     ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Origin, Authorization')
     ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 });
